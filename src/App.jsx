@@ -563,7 +563,6 @@ export default function App() {
                               className="pixel-input w-full pl-8 p-2"
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
-                              autoFocus
                           />
                       </div>
                       <div className="mt-2 text-xs text-gray-500">
@@ -712,11 +711,11 @@ export default function App() {
                   <div className="flex items-center gap-2"><div className="w-4 h-4 bg-purple-100 border border-purple-300"></div><span>大学生（{userProfile.studentSettings?.university.startAge}-{userProfile.studentSettings?.university.endAge}歳）</span></div>
               </div>
 
-              <div className="overflow-x-auto flex-grow custom-scrollbar p-6 bg-gray-50 timeline-content">
+              <div className="overflow-auto flex-grow p-3 sm:p-6 bg-gray-50 timeline-content flex items-center justify-center">
                   {allYears.length === 0 ? (
-                      <div className="text-center text-gray-500 mt-10">ランキングを作成するか、<br/>イベントを追加するとここに年表が表示されます。</div>
+                      <div className="text-center text-gray-500">ランキングを作成するか、<br/>イベントを追加するとここに年表が表示されます。</div>
                   ) : (
-                      <div className="flex gap-6 pb-10 min-w-max">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:flex gap-2 sm:gap-4 auto-rows-max">
                           {allYears.map((year) => {
                               const age = parseInt(year) - userProfile.birthYear;
                               const schoolGroup = getAgeGroup(age);
@@ -724,32 +723,32 @@ export default function App() {
                               const customEvents = lifeEvents.filter(e => userProfile.birthYear + e.age === parseInt(year));
                               
                               return (
-                                  <div key={year} className={`flex-shrink-0 w-48 border-4 ${schoolGroup.borderColor} ${schoolGroup.color} p-4 rounded-lg shadow-md`}>
-                                      <div className="font-bold text-center mb-3 pb-2 border-b-2 border-gray-400">
-                                          <div className="text-lg">{year}年</div>
-                                          <div className="text-xs text-gray-600 font-normal">{age}歳</div>
-                                          <div className="text-xs bg-white px-2 py-1 rounded mt-1 font-bold">{schoolGroup.name}</div>
+                                  <div key={year} className={`flex-shrink-0 w-28 sm:w-48 border-2 sm:border-4 ${schoolGroup.borderColor} ${schoolGroup.color} p-2 sm:p-4 rounded-lg shadow-md`}>
+                                      <div className="font-bold text-center mb-2 sm:mb-3 pb-1 sm:pb-2 border-b-2 border-gray-400">
+                                          <div className="text-xs sm:text-lg">{year}年</div>
+                                          <div className="text-[10px] sm:text-xs text-gray-600 font-normal">{age}歳</div>
+                                          <div className="text-[9px] sm:text-xs bg-white px-1 sm:px-2 py-0.5 sm:py-1 rounded mt-0.5 sm:mt-1 font-bold">{schoolGroup.name}</div>
                                       </div>
                                       
-                                      <div className="space-y-2 max-h-96 overflow-y-auto">
+                                      <div className="space-y-1 sm:space-y-2 max-h-40 sm:max-h-96 overflow-y-auto text-[8px] sm:text-xs">
                                           {/* ゲーム */}
                                           {yearEvents.map((game, idx) => (
-                                              <div key={`game-${idx}`} className="pixel-box p-2 bg-white text-xs border-2">
-                                                  <div className="font-bold text-sm mb-1 line-clamp-2">{game.title}</div>
-                                                  <div className="text-gray-600 text-[10px]">{game.consoleIcon} {game.consoleName}</div>
-                                                  {game.comment && <div className="text-[10px] text-gray-500 mt-1 italic line-clamp-2">"{game.comment}"</div>}
+                                              <div key={`game-${idx}`} className="pixel-box p-1 sm:p-2 bg-white border-2">
+                                                  <div className="font-bold text-[7px] sm:text-sm mb-0.5 sm:mb-1 line-clamp-2">{game.title}</div>
+                                                  <div className="text-gray-600 text-[7px] sm:text-[10px]">{game.consoleIcon}</div>
+                                                  {game.comment && <div className="text-[7px] sm:text-[10px] text-gray-500 mt-0.5 italic line-clamp-1">"{game.comment}"</div>}
                                               </div>
                                           ))}
                                           
                                           {/* カスタムイベント */}
                                           {customEvents.map((evt, idx) => (
-                                              <div key={`event-${idx}`} className="bg-red-100 border-2 border-red-300 p-2 rounded text-xs relative group">
-                                                  <div className="font-bold text-sm mb-1">{evt.event}</div>
+                                              <div key={`event-${idx}`} className="bg-red-100 border-2 border-red-300 p-1 sm:p-2 rounded relative group">
+                                                  <div className="font-bold text-[7px] sm:text-sm mb-0.5 line-clamp-2">{evt.event}</div>
                                                   <button 
                                                       onClick={() => deleteLifeEvent(lifeEvents.indexOf(evt))}
-                                                      className="absolute top-1 right-1 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                      className="absolute top-0.5 right-0.5 text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
                                                   >
-                                                      <X size={14} />
+                                                      <X size={12} />
                                                   </button>
                                               </div>
                                           ))}
