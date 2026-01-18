@@ -396,18 +396,20 @@ export default function App() {
       
       // スマホ対応：スクロール全体をキャプチャ
       const canvas = await html2canvas(element, { 
-        scale: 2, 
+        scale: 3, 
         backgroundColor: '#f0f0f0',
         allowTaint: true,
         useCORS: true,
         scrollY: -window.scrollY,
-        windowHeight: element.scrollHeight
+        windowHeight: element.scrollHeight,
+        logging: false
       });
       const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = image;
       link.download = `人生年表_${new Date().toISOString().slice(0, 10)}.png`;
       link.click();
+      alert('スクリーンショットをダウンロードしました');
     } catch (error) {
       console.error('Screenshot failed:', error);
       alert('スクリーンショット撮影に失敗しました');
@@ -694,9 +696,6 @@ export default function App() {
                       </button>
                       <button onClick={shareToSNS} title="SNSで共有" className="pixel-btn bg-blue-400 text-black px-2 py-1 text-xs font-bold hover:bg-blue-300 flex items-center gap-1">
                           <Share2 size={14} /> 共有
-                      </button>
-                      <button onClick={() => setShowExportModal(true)} title="データのエクスポート" className="pixel-btn bg-purple-400 text-black px-2 py-1 text-xs font-bold hover:bg-purple-300 flex items-center gap-1">
-                          <Download size={14} /> 保存
                       </button>
                       <button onClick={() => setShowTimelineModal(false)}><X/></button>
                   </div>
