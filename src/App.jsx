@@ -1231,20 +1231,12 @@ export default function App() {
              <p className="text-xs text-gray-600 mb-3">
                このアプリを気に入っていただけましたら、開発の継続を支援していただけると嬉しいです！
              </p>
-             <div className="space-y-2">
-               <button
-                 onClick={() => window.open('https://www.buymeacoffee.com/YOUR_USERNAME', '_blank')}
-                 className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300 text-sm flex items-center justify-center gap-2"
-               >
-                 <span className="text-lg">☕</span> Buy Me a Coffee
-               </button>
-               <button
-                 onClick={() => window.open('https://github.com/sponsors/YOUR_USERNAME', '_blank')}
-                 className="pixel-btn w-full bg-gray-800 text-white font-bold py-3 hover:bg-gray-700 text-sm flex items-center justify-center gap-2"
-               >
-                 <Heart size={16} className="text-pink-500" /> GitHub Sponsors
-               </button>
-             </div>
+             <button
+               onClick={() => window.open('https://buymeacoffee.com/ibdaddy', '_blank')}
+               className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300 text-sm flex items-center justify-center gap-2"
+             >
+               <span className="text-lg">☕</span> Buy Me a Coffee
+             </button>
            </div>
 
            <button onClick={saveProfile} className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300">
