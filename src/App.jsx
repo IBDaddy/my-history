@@ -99,6 +99,14 @@ const PixelStyles = () => (
     .animate-slideUp {
       animation: slideUp 0.3s ease-out forwards;
     }
+
+    /* Mobile-specific padding for quiz window */
+    @media (max-width: 640px) {
+      main {
+        padding-bottom: 22rem !important;
+      }
+    }
+    }
   `}</style>
 );
 
@@ -365,13 +373,18 @@ export default function App() {
     setShowHint(false);
   };
 
-  const submitQuizAnswer = () => {
-    if (!quizData || !quizAnswer.trim()) return;
-    
-    const isCorrect = quizData.title.toLowerCase() === quizAnswer.trim().toLowerCase();
+  const scrollToQuiz = () => {
+    // クイズウィンドウはfixed positionで常に表示されるため、
+    // クイズボタンをクリックしてクイズを開始
+    if (!quizData) {
+      startNewQuiz();
+    }
+  };
+
+  const showQuizAnswer = () => {
+    if (!quizData) return;
     
     setQuizResult({
-      isCorrect,
       correctTitle: quizData.title,
       genre: quizData.genre,
       year: quizData.year
@@ -1071,99 +1084,82 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-md mx-auto p-4 space-y-6">
+      <main className="max-w-md mx-auto p-4 space-y-6" style={{ paddingBottom: '20rem' }}>
+        <style>{`
+          @media (min-width: 640px) {
+            main {
+              padding-bottom: 1.5rem;
+              padding-right: 1rem;
+            }
+          }
+        `}</style>
         
         {/* VIEW MODE: HOME */}
         {activeTab === 'home' && (
-          <>
-            <div className="text-center mb-4 pt-2">
-              <p className="text-base mb-6 font-bold text-gray-700">「君のゲーム遍歴が、<br/>最高の酒の肴になる。」</p>
-              {Object.keys(rankings).length > 0 && (
-                <button 
-                  onClick={() => setShowTimelineModal(true)}
-                  className="mx-auto flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-4 border-black px-6 py-3 rounded-lg font-bold shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_rgba(0,0,0,1)] transition-all active:translate-y-0 active:shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
-                >
-                  <History size={24} />
-                  <span>人生ゲーム年表を見る</span>
-                </button>
-              )}
-            </div>
-
-            {/* タイトル隠しクイズセクション */}
-            <div className="mb-8 pixel-box bg-gradient-to-br from-blue-50 to-purple-50 p-4 border-4 border-blue-400">
-              <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                🎮 タイトル隠しクイズ
-              </h3>
+          <div className="relative">
+            {/* ドラクエ風メッセージウィンドウ - 右上配置 (mobile では下部に移動) */}
+            <div className="fixed sm:top-20 sm:right-4 bottom-0 sm:bottom-auto left-0 sm:left-auto w-full sm:w-80 max-w-[calc(100%-2rem)] sm:max-w-sm pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-4 z-30 shadow-lg sm:rounded-none rounded-t-lg">
+              {/* タイトル */}
+              <div className="text-right text-xs font-bold text-yellow-400 mb-3 border-b-2 border-yellow-400 pb-2 tracking-widest">
+                ≡ クイズ
+              </div>
               
               {!quizData ? (
                 <button 
                   onClick={startNewQuiz}
-                  className="w-full pixel-btn bg-blue-400 text-black font-bold py-3 hover:bg-blue-300"
+                  className="w-full pixel-btn bg-yellow-400 text-black font-bold py-2 hover:bg-yellow-300 text-sm tracking-wide"
                 >
-                  クイズを始める
+                  新しいクイズ
                 </button>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2 text-xs">
                   {/* 説明文表示 */}
-                  <div className="bg-white border-2 border-blue-400 p-3 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-2">このゲームは何でしょう？</p>
-                    <p className="text-sm leading-relaxed text-gray-800">"{quizData.description}"</p>
+                  <div className="bg-black border-2 border-yellow-400 p-2 rounded-sm">
+                    <p className="text-yellow-300 text-xs mb-1">このゲームは？</p>
+                    <p className="text-yellow-100 leading-tight text-xs">"{quizData.description}"</p>
                   </div>
 
                   {/* ヒント表示 */}
-                  <div className="space-y-1">
+                  <div>
                     {!showHint ? (
                       <button 
                         onClick={() => setShowHint(true)}
-                        className="w-full pixel-btn bg-gray-300 text-black px-2 py-2 text-xs font-bold hover:bg-gray-200"
+                        className="w-full pixel-btn bg-gray-600 text-yellow-300 px-2 py-1 text-xs font-bold hover:bg-gray-500"
                       >
-                        💡 ヒント: {quizData.genre} / {quizData.year}年
+                        💡 ヒント表示
                       </button>
                     ) : (
-                      <div className="bg-yellow-50 border-2 border-yellow-300 p-2 rounded text-xs">
-                        <span className="font-bold">ジャンル: {quizData.genre}</span> / <span className="font-bold">発売年: {quizData.year}年</span>
+                      <div className="bg-black border-2 border-yellow-400 p-2 rounded-sm text-yellow-100 text-xs">
+                        <span className="text-yellow-300">◆{quizData.genre}◆</span><br/>
+                        <span className="text-yellow-300">{quizData.year}年</span>
                       </div>
                     )}
                   </div>
 
                   {!quizResult ? (
-                    /* 回答入力フォーム */
-                    <div className="space-y-2">
-                      <input 
-                        type="text"
-                        className="w-full pixel-input p-2 text-sm"
-                        placeholder="ゲームのタイトルを入力..."
-                        value={quizAnswer}
-                        onChange={(e) => setQuizAnswer(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && submitQuizAnswer()}
-                      />
-                      <button 
-                        onClick={submitQuizAnswer}
-                        disabled={!quizAnswer.trim()}
-                        className="w-full pixel-btn bg-green-400 text-black px-2 py-2 font-bold hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        回答する
-                      </button>
-                    </div>
+                    /* 正解を見るボタン */
+                    <button 
+                      onClick={showQuizAnswer}
+                      className="w-full pixel-btn bg-yellow-500 text-black px-1 py-2 font-bold text-xs hover:bg-yellow-400"
+                    >
+                      正解を見る
+                    </button>
                   ) : (
-                    /* 結果表示 */
-                    <div className="space-y-2">
-                      <div className={`border-2 p-3 rounded-lg ${quizResult.isCorrect ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                        <p className="text-lg font-bold mb-2">
-                          {quizResult.isCorrect ? '✅ 正解！' : '❌ 不正解...'}
+                    /* 正解表示 */
+                    <div>
+                      <div className="border-2 p-2 rounded-sm text-xs bg-yellow-900 border-yellow-400 text-yellow-100">
+                        <p className="font-bold mb-1 text-yellow-300">
+                          正解
                         </p>
-                        <p className="text-sm">
-                          <span className="font-bold">正解:</span> {quizResult.correctTitle}
-                        </p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {quizResult.genre} / {quizResult.year}年
+                        <p className="text-xs">
+                          <span className="text-yellow-200">{quizResult.correctTitle}</span>
                         </p>
                       </div>
-                      <button 
+                      <button
                         onClick={startNewQuiz}
-                        className="w-full pixel-btn bg-blue-400 text-black px-2 py-2 font-bold hover:bg-blue-300"
+                        className="w-full mt-2 pixel-btn bg-blue-600 text-white px-1 py-1 font-bold text-xs hover:bg-blue-500"
                       >
-                        次のクイズ
+                        次へ →
                       </button>
                     </div>
                   )}
@@ -1171,7 +1167,38 @@ export default function App() {
               )}
             </div>
 
-            <div className="space-y-8 animate-slideUp">
+            {/* メインコンテンツ */}
+            <div>
+              <div className="text-center mb-6 pt-2">
+                <p className="text-base mb-6 font-bold text-gray-700">「君のゲーム遍歴が、<br/>最高の酒の肴になる。」</p>
+                
+                {/* ナビゲーション - 8bit風 */}
+                <div className="flex gap-3 justify-center mb-6">
+                  <button 
+                    onClick={() => setShowSettingsModal(true)}
+                    className="pixel-btn bg-purple-500 text-white font-bold py-2 px-3 text-xs hover:bg-purple-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
+                  >
+                    ⚙️ 設定
+                  </button>
+                  {Object.keys(rankings).length > 0 && (
+                    <button 
+                      onClick={() => setShowTimelineModal(true)}
+                      className="pixel-btn bg-green-500 text-white font-bold py-2 px-3 text-xs hover:bg-green-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
+                    >
+                      📅 年表
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => scrollToQuiz()}
+                    className="pixel-btn bg-blue-500 text-white font-bold py-2 px-3 text-xs hover:bg-blue-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
+                  >
+                    🎮 クイズ
+                  </button>
+                </div>
+              </div>
+              
+
+              <div className="space-y-8 animate-slideUp mt-6">
               {Object.values(rankings).map((ranking) => (
                 <div key={ranking.id} className="pixel-box p-0 overflow-hidden">
                   <div className={`p-3 flex justify-between items-center border-b-4 border-black ${ranking.color}`}>
@@ -1225,7 +1252,8 @@ export default function App() {
                 ))}
               </div>
             </div>
-          </>
+            </div>
+          </div>
         )}
 
         {/* VIEW MODE: EDIT */}
