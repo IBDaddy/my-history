@@ -1492,14 +1492,14 @@ export default function App() {
             <div>
               <div className="text-center mb-6 pt-2">
                 {/* ドラクエ風メッセージボックス */}
-                <div className="pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 mb-6 max-w-sm mx-auto shadow-lg">
+                <div className="pixel-box bg-black text-white border-4 border-white p-6 mb-6 w-full max-w-md mx-auto shadow-lg">
                   <p className="text-base font-bold leading-relaxed mb-4">
                     君のゲーム史を<br/>
                     きいてもよろしいですか?
                   </p>
-                  <div className="flex gap-8 pl-4">
-                    <p className="text-yellow-300 font-bold">▶はい</p>
-                    <p className="text-white font-bold">いいえ</p>
+                  <div className="flex justify-start gap-12 pl-6">
+                    <p className="text-white font-bold">▶はい</p>
+                    <p className="text-white font-bold">　いいえ</p>
                   </div>
                 </div>
 
