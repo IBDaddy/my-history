@@ -391,14 +391,17 @@ export default function App() {
 
   const captureTimeline = async () => {
     try {
-      const element = document.querySelector('.timeline-capture');
+      const element = document.querySelector('.timeline-content');
       if (!element) return;
       
+      // スマホ対応：スクロール全体をキャプチャ
       const canvas = await html2canvas(element, { 
         scale: 2, 
         backgroundColor: '#f0f0f0',
         allowTaint: true,
-        useCORS: true 
+        useCORS: true,
+        scrollY: -window.scrollY,
+        windowHeight: element.scrollHeight
       });
       const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
@@ -412,20 +415,37 @@ export default function App() {
   };
 
   const shareToSNS = () => {
-    const text = `🎮 私の人生ゲーム年表 🎮\n\n子どもの頃にプレイしたゲームと人生イベントをタイムラインで振り返ってみました。\n\n#強くてニューゲーム #ゲーム遍歴 #人生年表`;
+    const text = `🎮 私の人生ゲーム年表 🎮\n子どもの頃にプレイしたゲームと人生イベントをタイムラインで振り返ってみました。\n#強くてニューゲーム #ゲーム遍歴 #人生年表`;
     const url = window.location.href;
     
+    // SNS共有URLを作成
     const shareUrls = {
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-      line: `https://line.me/R/msg/text/${encodeURIComponent(text + '\n' + url)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
+      x: `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      line: `https://line.me/R/msg/text/${encodeURIComponent(text + ' ' + url)}`
     };
 
-    const platforms = Object.entries(shareUrls)
-      .map(([name, link]) => `${name}：${link}`)
-      .join('\n\n');
-
-    alert('以下のSNSで共有できます：\n\n' + platforms);
+    // ボタンダイアログを表示
+    const shareWindow = window.open('', '_blank', 'width=400,height=200');
+    if (shareWindow) {
+      shareWindow.document.write(`
+        <html>
+        <head>
+          <title>共有する</title>
+          <style>
+            body { font-family: sans-serif; padding: 20px; text-align: center; background-color: #f0f0f0; }
+            button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; border: 2px solid #333; background-color: white; border-radius: 4px; }
+            button:hover { background-color: #ddd; }
+          </style>
+        </head>
+        <body>
+          <h3>SNSで共有する</h3>
+          <button onclick="window.open('${shareUrls.x}', '_blank')">𝕏 で共有</button>
+          <button onclick="window.open('${shareUrls.line}', '_blank')">LINEで共有</button>
+          <button onclick="window.close()">閉じる</button>
+        </body>
+        </html>
+      `);
+    }
   };
 
   const exportData = () => {
@@ -555,26 +575,39 @@ export default function App() {
                           <div className="text-center text-gray-400 py-16">見つかりません<br/><span className="text-xs">別のキーワードで検索してください</span></div>
                       ) : (
                           filtered.map((game, i) => (
-                              <button 
+                              <div
                                   key={i}
-                                  onClick={() => selectGameFromList(game.title)}
-                                  className="w-full text-left p-4 hover:bg-yellow-50 border-b border-gray-200 flex flex-col gap-2 group transition-colors"
+                                  className="w-full text-left p-3 sm:p-4 border-b border-gray-200 flex flex-col gap-3 group hover:bg-yellow-50 transition-colors"
                               >
-                                  <div className="flex justify-between items-start gap-4">
-                                      <span className="font-bold text-gray-800 text-base flex-grow">{game.title}</span>
-                                      <span className="text-xs bg-gray-200 px-2 py-1 rounded text-gray-600 group-hover:bg-yellow-200 whitespace-nowrap">{game.year}年</span>
+                                  <div className="flex justify-between items-start gap-2 sm:gap-4">
+                                      <span className="font-bold text-gray-800 text-sm sm:text-base break-words">{game.title}</span>
+                                      <span className="text-xs bg-gray-200 px-2 py-1 rounded text-gray-600 whitespace-nowrap flex-shrink-0">{game.year}年</span>
                                   </div>
-                                  <div className="flex gap-2 text-xs">
+                                  <div className="flex gap-2 text-xs flex-wrap">
                                       {game.genre && (
                                           <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{game.genre}</span>
                                       )}
                                   </div>
                                   {game.description && (
-                                      <div className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                                      <div className="text-xs text-gray-600 leading-relaxed whitespace-pre-wrap break-words max-h-24 overflow-y-auto">
                                           {game.description}
                                       </div>
                                   )}
-                              </button>
+                                  <div className="flex gap-2 pt-2 flex-col sm:flex-row">
+                                      <button 
+                                          onClick={() => selectGameFromList(game.title)}
+                                          className="flex-1 pixel-btn bg-green-400 text-black px-2 py-2 text-xs font-bold hover:bg-green-300"
+                                      >
+                                          このゲームを選ぶ
+                                      </button>
+                                      <button 
+                                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(game.title)}`, '_blank')}
+                                          className="flex-1 pixel-btn bg-blue-400 text-black px-2 py-2 text-xs font-bold hover:bg-blue-300 flex items-center justify-center gap-1"
+                                      >
+                                          <ExternalLink size={12} /> Google検索
+                                      </button>
+                                  </div>
+                              </div>
                           ))
                       )}
                   </div>
@@ -679,7 +712,7 @@ export default function App() {
                   <div className="flex items-center gap-2"><div className="w-4 h-4 bg-purple-100 border border-purple-300"></div><span>大学生（{userProfile.studentSettings?.university.startAge}-{userProfile.studentSettings?.university.endAge}歳）</span></div>
               </div>
 
-              <div className="overflow-x-auto flex-grow custom-scrollbar p-6 bg-gray-50 timeline-capture">
+              <div className="overflow-x-auto flex-grow custom-scrollbar p-6 bg-gray-50 timeline-content">
                   {allYears.length === 0 ? (
                       <div className="text-center text-gray-500 mt-10">ランキングを作成するか、<br/>イベントを追加するとここに年表が表示されます。</div>
                   ) : (
@@ -787,10 +820,19 @@ export default function App() {
            <div>
              <label className="block text-sm font-bold mb-2">生まれ年 (年齢計算用)</label>
              <input 
-               type="number" 
+               type="text"
+               inputMode="numeric"
+               pattern="[0-9]*"
                className="pixel-input w-full p-2 text-lg"
                value={userProfile.birthYear}
-               onChange={(e) => setUserProfile({...userProfile, birthYear: parseInt(e.target.value)})}
+               onChange={(e) => {
+                 const val = e.target.value.replace(/[^0-9]/g, '');
+                 if (val === '' || /^[0-9]{1,4}$/.test(val)) {
+                   setUserProfile({...userProfile, birthYear: val ? parseInt(val) : ''});
+                 }
+               }}
+               maxLength="4"
+               placeholder="例：1990"
              />
            </div>
 
@@ -927,7 +969,7 @@ export default function App() {
            </div>
 
            <button onClick={saveProfile} className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300">
-             すべて保存する
+             冒険の書を記録する
            </button>
         </div>
       </div>
