@@ -1103,13 +1103,23 @@ export default function App() {
         {/* VIEW MODE: HOME */}
         {activeTab === 'home' && (
           <div className="relative">
-            {/* ドラクエ風メッセージウィンドウ - 中央配置 */}
+            {/* ドラクエ風メッセージウィンドウ - 全画面オーバーレイ */}
             {showQuizWindow && (
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[500px] max-w-2xl pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 z-30 shadow-lg">
-              {/* タイトル */}
-              <div className="text-right text-xs font-bold text-yellow-400 mb-3 border-b-2 border-yellow-400 pb-2 tracking-widest">
-                ≡ クイズ
-              </div>
+            <div className="fixed inset-0 bg-black/85 flex items-center justify-center z-50 p-4" onClick={() => setShowQuizWindow(false)}>
+              <div className="w-full sm:w-[600px] max-w-3xl pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 shadow-lg relative" onClick={e => e.stopPropagation()}>
+                {/* 閉じるボタン - 内側に配置 */}
+                <button
+                  onClick={() => setShowQuizWindow(false)}
+                  className="absolute top-2 right-2 text-yellow-400 hover:text-yellow-300 font-bold text-2xl w-8 h-8 flex items-center justify-center"
+                  title="クイズウィンドウを閉じる"
+                >
+                  ✕
+                </button>
+
+                {/* タイトル */}
+                <div className="text-right text-sm font-bold text-yellow-400 mb-4 border-b-2 border-yellow-400 pb-2 tracking-widest pr-10">
+                  ≡ クイズ
+                </div>
               
               {!quizData ? (
                 <button 
@@ -1119,24 +1129,24 @@ export default function App() {
                   新しいクイズ
                 </button>
               ) : (
-                <div className="space-y-2 text-xs">
+                <div className="space-y-3 text-sm">
                   {/* 説明文表示 */}
-                  <div className="bg-black border-2 border-yellow-400 p-2 rounded-sm">
-                    <p className="text-yellow-300 text-xs mb-1">このゲームは？</p>
-                    <p className="text-yellow-100 leading-tight text-xs">"{quizData.description}"</p>
+                  <div className="bg-black border-2 border-yellow-400 p-3 rounded-sm">
+                    <p className="text-yellow-300 text-sm mb-2">このゲームは？</p>
+                    <p className="text-yellow-100 leading-relaxed text-sm">"{quizData.description}"</p>
                   </div>
 
                   {/* ヒント表示 */}
                   <div>
                     {!showHint ? (
-                      <button 
+                      <button
                         onClick={() => setShowHint(true)}
-                        className="w-full pixel-btn bg-gray-600 text-yellow-300 px-2 py-1 text-xs font-bold hover:bg-gray-500"
+                        className="w-full pixel-btn bg-gray-600 text-yellow-300 px-3 py-2 text-sm font-bold hover:bg-gray-500"
                       >
                         💡 ヒント表示
                       </button>
                     ) : (
-                      <div className="bg-black border-2 border-yellow-400 p-2 rounded-sm text-yellow-100 text-xs">
+                      <div className="bg-black border-2 border-yellow-400 p-3 rounded-sm text-yellow-100 text-sm">
                         <span className="text-yellow-300">◆{quizData.genre}◆</span><br/>
                         <span className="text-yellow-300">{quizData.year}年</span>
                       </div>
@@ -1145,33 +1155,33 @@ export default function App() {
 
                   {!quizResult ? (
                     /* 正解を見るボタン */
-                    <button 
+                    <button
                       onClick={showQuizAnswer}
-                      className="w-full pixel-btn bg-yellow-500 text-black px-1 py-2 font-bold text-xs hover:bg-yellow-400"
+                      className="w-full pixel-btn bg-yellow-500 text-black px-2 py-3 font-bold text-sm hover:bg-yellow-400"
                     >
                       正解を見る
                     </button>
                   ) : (
                     /* 正解表示 */
                     <div>
-                      <div className="border-2 p-2 rounded-sm text-xs bg-yellow-900 border-yellow-400 text-yellow-100">
-                        <p className="font-bold mb-1 text-yellow-300">
+                      <div className="border-2 p-3 rounded-sm bg-yellow-900 border-yellow-400 text-yellow-100">
+                        <p className="font-bold mb-2 text-yellow-300 text-sm">
                           正解
                         </p>
-                        <p className="text-xs">
+                        <p className="text-base font-bold">
                           <span className="text-yellow-200">{quizResult.correctTitle}</span>
                         </p>
                       </div>
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex gap-2 mt-3">
                         <button
                           onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(quizResult.correctTitle)}`, '_blank')}
-                          className="flex-1 pixel-btn bg-green-600 text-white px-1 py-1 font-bold text-xs hover:bg-green-500 flex items-center justify-center gap-1"
+                          className="flex-1 pixel-btn bg-green-600 text-white px-2 py-2 font-bold text-sm hover:bg-green-500 flex items-center justify-center gap-1"
                         >
-                          <ExternalLink size={12} /> Google検索
+                          <ExternalLink size={14} /> Google検索
                         </button>
                         <button
                           onClick={startNewQuiz}
-                          className="flex-1 pixel-btn bg-blue-600 text-white px-1 py-1 font-bold text-xs hover:bg-blue-500"
+                          className="flex-1 pixel-btn bg-blue-600 text-white px-2 py-2 font-bold text-sm hover:bg-blue-500"
                         >
                           次へ →
                         </button>
@@ -1180,21 +1190,14 @@ export default function App() {
                   )}
                 </div>
               )}
-              {/* 閉じるボタン */}
-              <button
-                onClick={() => setShowQuizWindow(false)}
-                className="absolute -top-6 sm:-top-8 right-0 text-yellow-400 hover:text-yellow-300 font-bold text-xl"
-                title="クイズウィンドウを閉じる"
-              >
-                ✕
-              </button>
+              </div>
             </div>
             )}
 
             {/* メインコンテンツ */}
             <div>
               <div className="text-center mb-6 pt-2">
-                <p className="text-base mb-6 font-bold text-gray-700">「君のゲーム遍歴が、<br/>最高の酒の肴になる。」</p>
+                <p className="text-base mb-6 font-bold text-gray-700">君のゲーム史を<br/>きいてもよろしいですか?<br/><span className="inline-block mt-2">▶はい　いいえ</span></p>
 
                 {/* ナビゲーション - 8bit風 */}
                 <div className="flex gap-3 justify-center mb-6">
