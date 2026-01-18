@@ -1,11 +1,8 @@
-const CACHE_NAME = 'my-history-v1';
+const CACHE_NAME = 'tsuyokute-newgame-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/gameDatabase.js',
-  '/src/index.css'
+  '/manifest.json'
 ];
 
 // Install event

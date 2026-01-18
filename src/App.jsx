@@ -212,6 +212,10 @@ export default function App() {
   const [showSNSShareModal, setShowSNSShareModal] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
+  // PWA Install States
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+
   // 1. Firebase Auth & Data Fetch
   useEffect(() => {
     if (!auth) {
@@ -281,6 +285,52 @@ export default function App() {
 
     return () => unsubRankings();
   }, [user]);
+
+  // PWA Install Prompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      setDeferredPrompt(e);
+      // Show install button/prompt after a delay
+      setTimeout(() => {
+        setShowInstallPrompt(true);
+      }, 3000); // Show after 3 seconds
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Check if app is already installed
+    window.addEventListener('appinstalled', () => {
+      setShowInstallPrompt(false);
+      setDeferredPrompt(null);
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+
+    // Clear the deferred prompt
+    setDeferredPrompt(null);
+    setShowInstallPrompt(false);
+  };
 
   // Handlers
   const handleEdit = (consoleId) => {
@@ -1634,6 +1684,35 @@ export default function App() {
       {showSettingsModal && <SettingsModal />}
       {showExportModal && <ExportModal />}
       {showSNSShareModal && <SNSShareModal />}
+
+      {/* PWA Install Prompt */}
+      {showInstallPrompt && (
+        <div className="fixed bottom-4 left-4 right-4 z-50 animate-slideUp">
+          <div className="pixel-box bg-yellow-400 border-4 border-black p-4 shadow-lg max-w-md mx-auto">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 text-3xl">📱</div>
+              <div className="flex-grow">
+                <h3 className="font-bold text-black mb-1">アプリをインストール</h3>
+                <p className="text-sm text-gray-800 mb-3">ホーム画面に追加して、いつでもアクセスできます！</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleInstallClick}
+                    className="pixel-btn bg-black text-yellow-400 font-bold py-2 px-4 text-sm hover:bg-gray-800 flex-1"
+                  >
+                    インストール
+                  </button>
+                  <button
+                    onClick={() => setShowInstallPrompt(false)}
+                    className="pixel-btn bg-gray-600 text-white font-bold py-2 px-4 text-sm hover:bg-gray-500"
+                  >
+                    後で
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
