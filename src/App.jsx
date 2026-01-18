@@ -198,6 +198,7 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Title Quiz States
+  const [showQuizWindow, setShowQuizWindow] = useState(false);
   const [quizData, setQuizData] = useState(null);
   const [quizAnswer, setQuizAnswer] = useState('');
   const [quizResult, setQuizResult] = useState(null);
@@ -374,8 +375,8 @@ export default function App() {
   };
 
   const scrollToQuiz = () => {
-    // クイズウィンドウはfixed positionで常に表示されるため、
-    // クイズボタンをクリックしてクイズを開始
+    // クイズウィンドウを表示して新しいクイズを開始
+    setShowQuizWindow(true);
     if (!quizData) {
       startNewQuiz();
     }
@@ -1098,6 +1099,7 @@ export default function App() {
         {activeTab === 'home' && (
           <div className="relative">
             {/* ドラクエ風メッセージウィンドウ - 右上配置 (mobile では下部に移動) */}
+            {showQuizWindow && (
             <div className="fixed sm:top-20 sm:right-4 bottom-0 sm:bottom-auto left-0 sm:left-auto w-full sm:w-80 max-w-[calc(100%-2rem)] sm:max-w-sm pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-4 z-30 shadow-lg sm:rounded-none rounded-t-lg">
               {/* タイトル */}
               <div className="text-right text-xs font-bold text-yellow-400 mb-3 border-b-2 border-yellow-400 pb-2 tracking-widest">
@@ -1165,7 +1167,16 @@ export default function App() {
                   )}
                 </div>
               )}
+              {/* 閉じるボタン */}
+              <button
+                onClick={() => setShowQuizWindow(false)}
+                className="absolute -top-6 sm:-top-8 right-0 text-yellow-400 hover:text-yellow-300 font-bold text-xl"
+                title="クイズウィンドウを閉じる"
+              >
+                ✕
+              </button>
             </div>
+            )}
 
             {/* メインコンテンツ */}
             <div>
