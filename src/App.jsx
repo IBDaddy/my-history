@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Edit3, Save, Gamepad2, Loader2, List, Search, X, Camera, ExternalLink, Grid, Calendar, Settings, History, PenTool, Plus, Trash2, Share2, ChevronUp, ChevronDown, Download, Upload } from 'lucide-react';
+import { Edit3, Save, Gamepad2, Loader2, List, Search, X, Camera, ExternalLink, Grid, Calendar, Settings, History, PenTool, Plus, Trash2, Share2, ChevronUp, ChevronDown, Download, Upload, Heart } from 'lucide-react';
 import { MASTERPIECE_DB } from './gameDatabase';
 import html2canvas from 'html2canvas';
 
@@ -1201,26 +1201,49 @@ export default function App() {
                <Download size={16} /> データ管理
              </h3>
              <div className="space-y-2">
-               <button 
+               <button
                  onClick={exportData}
                  className="pixel-btn w-full bg-green-400 text-black font-bold py-2 hover:bg-green-300 text-sm flex items-center justify-center gap-2"
                >
                  <Download size={14} /> データをダウンロード
                </button>
                <label className="block">
-                 <input 
+                 <input
                    type="file"
                    accept=".json"
                    onChange={importData}
                    className="hidden"
                  />
-                 <button 
+                 <button
                    onClick={(e) => e.currentTarget.previousElementSibling?.click()}
                    className="pixel-btn w-full bg-blue-400 text-black font-bold py-2 hover:bg-blue-300 text-sm flex items-center justify-center gap-2"
                  >
                    <Upload size={14} /> データをアップロード
                  </button>
                </label>
+             </div>
+           </div>
+
+           <div className="border-t-2 pt-4">
+             <h3 className="font-bold mb-3 flex items-center gap-2">
+               <Heart size={16} className="text-red-500" /> 開発者を支援する
+             </h3>
+             <p className="text-xs text-gray-600 mb-3">
+               このアプリを気に入っていただけましたら、開発の継続を支援していただけると嬉しいです！
+             </p>
+             <div className="space-y-2">
+               <button
+                 onClick={() => window.open('https://www.buymeacoffee.com/YOUR_USERNAME', '_blank')}
+                 className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300 text-sm flex items-center justify-center gap-2"
+               >
+                 <span className="text-lg">☕</span> Buy Me a Coffee
+               </button>
+               <button
+                 onClick={() => window.open('https://github.com/sponsors/YOUR_USERNAME', '_blank')}
+                 className="pixel-btn w-full bg-gray-800 text-white font-bold py-3 hover:bg-gray-700 text-sm flex items-center justify-center gap-2"
+               >
+                 <Heart size={16} className="text-pink-500" /> GitHub Sponsors
+               </button>
              </div>
            </div>
 
