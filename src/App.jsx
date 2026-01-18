@@ -189,6 +189,12 @@ export default function App() {
   const [targetRankIndex, setTargetRankIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Quiz States
+  const [quizGame, setQuizGame] = useState(null);
+  const [quizUserAnswer, setQuizUserAnswer] = useState('');
+  const [quizResult, setQuizResult] = useState(null);
+  const [quizScore, setQuizScore] = useState(0);
+
   // Life Events States
   const [lifeEvents, setLifeEvents] = useState([]);
   const [eventEditModal, setEventEditModal] = useState({ show: false, age: '', event: '' });
@@ -341,6 +347,56 @@ export default function App() {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
     setActiveTab('home');
+  };
+
+  // Quiz Functions
+  const startNewQuiz = () => {
+    const allGames = [];
+    Object.values(MASTERPIECE_DB).forEach(games => {
+      allGames.push(...games);
+    });
+    
+    if (allGames.length === 0) return;
+    
+    const randomGame = allGames[Math.floor(Math.random() * allGames.length)];
+    setQuizGame(randomGame);
+    setQuizUserAnswer('');
+    setQuizResult(null);
+  };
+
+  const submitQuizAnswer = () => {
+    if (!quizGame || !quizUserAnswer) return;
+    
+    const userPrice = parseInt(quizUserAnswer);
+    const estimatedPrice = quizGame.estimatedPrice || Math.floor(Math.random() * 8000) + 1000; // 1000-9000円のランダム価格
+    
+    const diff = Math.abs(userPrice - estimatedPrice);
+    let resultMessage = '';
+    let points = 0;
+    
+    if (diff === 0) {
+      resultMessage = '🎯 大当たり！ぴったり！';
+      points = 100;
+    } else if (diff <= 500) {
+      resultMessage = '⭐ 大接近！惜しい！';
+      points = 50;
+    } else if (diff <= 1000) {
+      resultMessage = '👍 まあまあ！';
+      points = 25;
+    } else {
+      resultMessage = '❌ 残念...';
+      points = 0;
+    }
+    
+    setQuizResult({
+      message: resultMessage,
+      userAnswer: userPrice,
+      actualPrice: estimatedPrice,
+      diff: diff,
+      points: points
+    });
+    
+    setQuizScore(prev => prev + points);
   };
 
   const openGameList = (index) => {
@@ -755,6 +811,88 @@ export default function App() {
                                   </div>
                               );
                           })}
+                      </div>
+                  )}
+              </div>
+
+              {/* 「今いくら？」クイズセクション */}
+              <div className="border-t-4 border-black bg-yellow-100 p-4">
+                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                      🎮 今いくら？ クイズ
+                  </h3>
+                  
+                  {!quizGame ? (
+                      <button 
+                          onClick={startNewQuiz}
+                          className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300"
+                      >
+                          クイズを始める
+                      </button>
+                  ) : (
+                      <div className="space-y-3">
+                          <div className="bg-white border-2 border-black p-3 rounded">
+                              <p className="text-sm text-gray-600">このレトロゲームの中古市場価格は？</p>
+                              <p className="text-base font-bold mt-2">{quizGame.title}</p>
+                              <p className="text-xs text-gray-500 mt-1">{quizGame.genre} / {quizGame.year}年</p>
+                          </div>
+                          
+                          {!quizResult ? (
+                              <div className="space-y-2">
+                                  <div className="flex gap-2">
+                                      <input 
+                                          type="number"
+                                          inputMode="numeric"
+                                          className="flex-1 pixel-input p-2 text-lg"
+                                          placeholder="価格を入力（円）"
+                                          value={quizUserAnswer}
+                                          onChange={(e) => setQuizUserAnswer(e.target.value)}
+                                      />
+                                      <button 
+                                          onClick={submitQuizAnswer}
+                                          disabled={!quizUserAnswer}
+                                          className="pixel-btn bg-green-400 text-black px-4 py-2 font-bold hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                          回答
+                                      </button>
+                                  </div>
+                                  <button 
+                                      onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(quizGame.title + ' 中古 価格')}`, '_blank')}
+                                      className="w-full pixel-btn bg-blue-400 text-black px-2 py-2 font-bold hover:bg-blue-300 text-sm flex items-center justify-center gap-1"
+                                  >
+                                      <ExternalLink size={14} /> Google検索で相場を調べる
+                                  </button>
+                              </div>
+                          ) : (
+                              <div className="space-y-2">
+                                  <div className="bg-white border-2 border-black p-3 rounded">
+                                      <p className="text-lg font-bold">{quizResult.message}</p>
+                                      <div className="text-sm mt-2 space-y-1">
+                                          <p>あなたの回答: <span className="font-bold">{quizResult.userAnswer}円</span></p>
+                                          <p>実際の相場: <span className="font-bold">{quizResult.actualPrice}円</span></p>
+                                          <p>差額: <span className="font-bold">{quizResult.diff}円</span></p>
+                                      </div>
+                                      <p className="text-lg font-bold text-yellow-600 mt-2">+{quizResult.points}ポイント！</p>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2">
+                                      <button 
+                                          onClick={startNewQuiz}
+                                          className="pixel-btn bg-green-400 text-black px-2 py-2 font-bold hover:bg-green-300 text-sm"
+                                      >
+                                          次の問題
+                                      </button>
+                                      <button 
+                                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(quizGame.title + ' 中古 価格')}`, '_blank')}
+                                          className="pixel-btn bg-blue-400 text-black px-2 py-2 font-bold hover:bg-blue-300 text-sm flex items-center justify-center gap-1"
+                                      >
+                                          <ExternalLink size={12} /> 詳しく調べる
+                                      </button>
+                                  </div>
+                              </div>
+                          )}
+                          
+                          <div className="text-right text-sm font-bold text-gray-700">
+                              スコア: {quizScore}ポイント
+                          </div>
                       </div>
                   )}
               </div>
