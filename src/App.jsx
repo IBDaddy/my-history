@@ -898,11 +898,17 @@ export default function App() {
 
   const addLifeEvent = () => {
     if (eventEditModal.age && eventEditModal.event) {
-      const newEvent = { age: parseInt(eventEditModal.age), event: eventEditModal.event };
+      const age = parseInt(eventEditModal.age);
+      // 年齢が0-100の範囲内かチェック
+      if (age < 0 || age > 100) {
+        alert('年齢は0〜100の範囲で入力してください');
+        return;
+      }
+      const newEvent = { age, event: eventEditModal.event };
       const updatedEvents = [...lifeEvents, newEvent].sort((a, b) => a.age - b.age);
       setLifeEvents(updatedEvents);
       setEventEditModal({ show: false, age: '', event: '' });
-      
+
       // プロフィールに保存
       if (user && db) {
         setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'settings'), {
@@ -1029,7 +1035,8 @@ export default function App() {
                                   value={eventEditModal.age}
                                   onChange={(e) => {
                                     const val = e.target.value.replace(/[^0-9]/g, '');
-                                    if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 100)) {
+                                    // 最大3桁まで許可（0-999）
+                                    if (val.length <= 3) {
                                       setEventEditModal(prev => ({ ...prev, age: val }));
                                     }
                                   }}
@@ -1239,8 +1246,8 @@ export default function App() {
              </button>
            </div>
 
-           <button onClick={saveProfile} className="pixel-btn w-full bg-yellow-400 text-black font-bold py-3 hover:bg-yellow-300">
-             冒険の書を記録する
+           <button onClick={saveProfile} className="pixel-btn w-full bg-blue-500 text-white font-bold py-3 hover:bg-blue-400">
+             保存する
            </button>
         </div>
       </div>
@@ -1486,13 +1493,13 @@ export default function App() {
               <div className="text-center mb-6 pt-2">
                 {/* ドラクエ風メッセージボックス */}
                 <div className="pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 mb-6 max-w-sm mx-auto shadow-lg">
-                  <p className="text-base font-bold leading-relaxed">
+                  <p className="text-base font-bold leading-relaxed mb-4">
                     君のゲーム史を<br/>
                     きいてもよろしいですか?
                   </p>
-                  <div className="mt-4 text-left pl-4">
+                  <div className="flex gap-8 pl-4">
                     <p className="text-yellow-300 font-bold">▶はい</p>
-                    <p className="text-white font-bold pl-3">いいえ</p>
+                    <p className="text-white font-bold">いいえ</p>
                   </div>
                 </div>
 
