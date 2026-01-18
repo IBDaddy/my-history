@@ -1298,14 +1298,14 @@ export default function App() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 bg-gray-900 text-white p-3 border-b-4 border-gray-700 shadow-lg">
-        <div className="max-w-md mx-auto flex justify-between items-center">
+        <div className="max-w-md mx-auto flex justify-center items-center relative">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('home')}>
             <Gamepad2 className="w-6 h-6 text-yellow-400" />
             <h1 className="text-lg font-bold tracking-wider text-yellow-400 drop-shadow-md">
               強くてニューゲーム
             </h1>
           </div>
-          <button onClick={() => setShowSettingsModal(true)} className="p-2 hover:bg-gray-700 rounded-full">
+          <button onClick={() => setShowSettingsModal(true)} className="absolute right-0 p-2 hover:bg-gray-700 rounded-full">
             <Settings size={20} className="text-gray-300" />
           </button>
         </div>
@@ -1419,7 +1419,17 @@ export default function App() {
             {/* メインコンテンツ */}
             <div>
               <div className="text-center mb-6 pt-2">
-                <p className="text-base mb-6 font-bold text-gray-700">君のゲーム史を<br/>きいてもよろしいですか?<br/><span className="inline-block mt-2">▶はい　いいえ</span></p>
+                {/* ドラクエ風メッセージボックス */}
+                <div className="pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 mb-6 max-w-sm mx-auto shadow-lg">
+                  <p className="text-base font-bold leading-relaxed">
+                    君のゲーム史を<br/>
+                    きいてもよろしいですか?
+                  </p>
+                  <div className="mt-4 text-left pl-4">
+                    <p className="text-yellow-300 font-bold">▶はい</p>
+                    <p className="text-white font-bold pl-3">いいえ</p>
+                  </div>
+                </div>
 
                 {/* ナビゲーション - 8bit風 */}
                 <div className="flex gap-3 justify-center mb-6">
