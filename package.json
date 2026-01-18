@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "prebuild": "python3 scripts/build-db.py",
+    "build-db": "python3 scripts/build-db.py",
+    "prebuild": "npm run build-db || true",
     "build": "vite build",
-    "predev": "python3 scripts/build-db.py",
+    "predev": "npm run build-db || true",
     "dev": "vite",
     "preview": "vite preview"
   },
