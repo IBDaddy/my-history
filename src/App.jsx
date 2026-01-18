@@ -817,34 +817,39 @@ export default function App() {
                       <div className="space-y-4">
                           <div>
                               <label className="block text-sm font-bold mb-2">年齢</label>
-                              <input 
-                                  type="number" 
-                                  min="0" 
-                                  max="100" 
+                              <input
+                                  type="text"
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
                                   className="pixel-input w-full p-2"
                                   value={eventEditModal.age}
-                                  onChange={(e) => setEventEditModal({ ...eventEditModal, age: e.target.value })}
+                                  onChange={(e) => {
+                                    const val = e.target.value.replace(/[^0-9]/g, '');
+                                    if (val === '' || (parseInt(val) >= 0 && parseInt(val) <= 100)) {
+                                      setEventEditModal(prev => ({ ...prev, age: val }));
+                                    }
+                                  }}
                                   placeholder="例：16"
                               />
                           </div>
                           <div>
                               <label className="block text-sm font-bold mb-2">イベント内容</label>
-                              <textarea 
+                              <textarea
                                   rows={3}
                                   className="pixel-input w-full p-2"
                                   value={eventEditModal.event}
-                                  onChange={(e) => setEventEditModal({ ...eventEditModal, event: e.target.value })}
+                                  onChange={(e) => setEventEditModal(prev => ({ ...prev, event: e.target.value }))}
                                   placeholder="例：部活の友達とスマブラにはまる"
                               />
                           </div>
                           <div className="flex gap-2">
-                              <button 
+                              <button
                                   onClick={() => setEventEditModal({ show: false, age: '', event: '' })}
                                   className="pixel-btn flex-1 bg-gray-300 py-2 font-bold hover:bg-gray-200"
                               >
                                   キャンセル
                               </button>
-                              <button 
+                              <button
                                   onClick={addLifeEvent}
                                   className="pixel-btn flex-1 bg-green-400 py-2 font-bold hover:bg-green-300"
                               >
@@ -1098,9 +1103,9 @@ export default function App() {
         {/* VIEW MODE: HOME */}
         {activeTab === 'home' && (
           <div className="relative">
-            {/* ドラクエ風メッセージウィンドウ - 右上配置 (mobile では下部に移動) */}
+            {/* ドラクエ風メッセージウィンドウ - 中央配置 */}
             {showQuizWindow && (
-            <div className="fixed sm:top-20 sm:right-4 bottom-0 sm:bottom-auto left-0 sm:left-auto w-full sm:w-80 max-w-[calc(100%-2rem)] sm:max-w-sm pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-4 z-30 shadow-lg sm:rounded-none rounded-t-lg">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[500px] max-w-2xl pixel-box bg-gray-900 text-white border-4 border-yellow-400 p-6 z-30 shadow-lg">
               {/* タイトル */}
               <div className="text-right text-xs font-bold text-yellow-400 mb-3 border-b-2 border-yellow-400 pb-2 tracking-widest">
                 ≡ クイズ
@@ -1157,12 +1162,20 @@ export default function App() {
                           <span className="text-yellow-200">{quizResult.correctTitle}</span>
                         </p>
                       </div>
-                      <button
-                        onClick={startNewQuiz}
-                        className="w-full mt-2 pixel-btn bg-blue-600 text-white px-1 py-1 font-bold text-xs hover:bg-blue-500"
-                      >
-                        次へ →
-                      </button>
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(quizResult.correctTitle)}`, '_blank')}
+                          className="flex-1 pixel-btn bg-green-600 text-white px-1 py-1 font-bold text-xs hover:bg-green-500 flex items-center justify-center gap-1"
+                        >
+                          <ExternalLink size={12} /> Google検索
+                        </button>
+                        <button
+                          onClick={startNewQuiz}
+                          className="flex-1 pixel-btn bg-blue-600 text-white px-1 py-1 font-bold text-xs hover:bg-blue-500"
+                        >
+                          次へ →
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1182,24 +1195,18 @@ export default function App() {
             <div>
               <div className="text-center mb-6 pt-2">
                 <p className="text-base mb-6 font-bold text-gray-700">「君のゲーム遍歴が、<br/>最高の酒の肴になる。」</p>
-                
+
                 {/* ナビゲーション - 8bit風 */}
                 <div className="flex gap-3 justify-center mb-6">
-                  <button 
-                    onClick={() => setShowSettingsModal(true)}
-                    className="pixel-btn bg-purple-500 text-white font-bold py-2 px-3 text-xs hover:bg-purple-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
-                  >
-                    ⚙️ 設定
-                  </button>
                   {Object.keys(rankings).length > 0 && (
-                    <button 
+                    <button
                       onClick={() => setShowTimelineModal(true)}
                       className="pixel-btn bg-green-500 text-white font-bold py-2 px-3 text-xs hover:bg-green-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
                     >
                       📅 年表
                     </button>
                   )}
-                  <button 
+                  <button
                     onClick={() => scrollToQuiz()}
                     className="pixel-btn bg-blue-500 text-white font-bold py-2 px-3 text-xs hover:bg-blue-400 border-2 border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] tracking-widest"
                   >
