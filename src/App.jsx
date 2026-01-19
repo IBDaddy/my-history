@@ -1492,12 +1492,12 @@ export default function App() {
             <div>
               <div className="text-center mb-6 pt-2">
                 {/* ドラクエ風メッセージボックス */}
-                <div className="pixel-box bg-black text-white border-4 border-white p-6 mb-6 w-full max-w-md mx-auto shadow-lg">
-                  <p className="text-base font-bold leading-relaxed mb-4">
+                <div className="bg-black text-white border-4 border-white p-6 mb-6 w-full max-w-md mx-auto" style={{boxShadow: '6px 6px 0px 0px rgba(0,0,0,0.3)'}}>
+                  <p className="text-base font-bold leading-relaxed mb-4 text-center">
                     君のゲーム史を<br/>
                     きいてもよろしいですか?
                   </p>
-                  <div className="flex justify-start gap-12 pl-6">
+                  <div className="flex justify-center gap-12">
                     <p className="text-white font-bold">▶はい</p>
                     <p className="text-white font-bold">　いいえ</p>
                   </div>
