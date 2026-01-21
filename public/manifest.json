@@ -12,19 +12,19 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23fbc02d' width='192' height='192'/><text x='96' y='130' font-size='90' font-weight='bold' text-anchor='middle' fill='%23212529'>🎮</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23654321' width='192' height='192'/><rect x='20' y='30' width='152' height='132' rx='8' fill='%23443322' stroke='%23332211' stroke-width='3'/><rect x='30' y='40' width='132' height='95' fill='%23000000' stroke='%23222222' stroke-width='2'/><text x='96' y='75' font-family='monospace' font-size='16' font-weight='bold' fill='%2300ff00' text-anchor='middle'>NEW</text><text x='96' y='95' font-family='monospace' font-size='16' font-weight='bold' fill='%2300ff00' text-anchor='middle'>GAME</text><line x1='85' y1='20' x2='85' y2='30' stroke='%23888888' stroke-width='3'/><line x1='107' y1='15' x2='107' y2='30' stroke='%23888888' stroke-width='3'/><circle cx='40' cy='155' r='8' fill='%23666666' stroke='%23444444' stroke-width='2'/><circle cx='60' cy='155' r='6' fill='%23555555'/><rect x='140' y='145' width='15' height='20' rx='2' fill='%23555555'/></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23fbc02d' width='512' height='512'/><text x='256' y='350' font-size='240' font-weight='bold' text-anchor='middle' fill='%23212529'>🎮</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23654321' width='512' height='512'/><rect x='50' y='80' width='412' height='352' rx='20' fill='%23443322' stroke='%23332211' stroke-width='8'/><rect x='80' y='110' width='352' height='250' fill='%23000000' stroke='%23222222' stroke-width='6'/><text x='256' y='200' font-family='monospace' font-size='48' font-weight='bold' fill='%2300ff00' text-anchor='middle'>NEW</text><text x='256' y='260' font-family='monospace' font-size='48' font-weight='bold' fill='%2300ff00' text-anchor='middle'>GAME</text><line x1='230' y1='50' x2='230' y2='80' stroke='%23888888' stroke-width='8'/><line x1='282' y1='40' x2='282' y2='80' stroke='%23888888' stroke-width='8'/><circle cx='110' cy='400' r='22' fill='%23666666' stroke='%23444444' stroke-width='4'/><circle cx='160' cy='400' r='16' fill='%23555555'/><circle cx='200' cy='400' r='16' fill='%23555555'/><rect x='380' y='380' width='40' height='50' rx='5' fill='%23555555'/></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23fbc02d' width='192' height='192'/><text x='96' y='130' font-size='90' font-weight='bold' text-anchor='middle' fill='%23212529'>🎮</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23654321' width='192' height='192'/><rect x='20' y='30' width='152' height='132' rx='8' fill='%23443322' stroke='%23332211' stroke-width='3'/><rect x='30' y='40' width='132' height='95' fill='%23000000' stroke='%23222222' stroke-width='2'/><text x='96' y='75' font-family='monospace' font-size='16' font-weight='bold' fill='%2300ff00' text-anchor='middle'>NEW</text><text x='96' y='95' font-family='monospace' font-size='16' font-weight='bold' fill='%2300ff00' text-anchor='middle'>GAME</text><line x1='85' y1='20' x2='85' y2='30' stroke='%23888888' stroke-width='3'/><line x1='107' y1='15' x2='107' y2='30' stroke='%23888888' stroke-width='3'/><circle cx='40' cy='155' r='8' fill='%23666666' stroke='%23444444' stroke-width='2'/><circle cx='60' cy='155' r='6' fill='%23555555'/><rect x='140' y='145' width='15' height='20' rx='2' fill='%23555555'/></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "maskable"
