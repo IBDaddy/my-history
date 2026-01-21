@@ -1082,7 +1082,7 @@ export default function App() {
         <div className="p-6 space-y-6">
            <div>
              <label className="block text-sm font-bold mb-2">生まれ年 (年齢計算用)</label>
-             <input 
+             <input
                type="text"
                inputMode="numeric"
                pattern="[0-9]*"
@@ -1090,8 +1090,9 @@ export default function App() {
                value={userProfile.birthYear}
                onChange={(e) => {
                  const val = e.target.value.replace(/[^0-9]/g, '');
-                 if (val === '' || /^[0-9]{1,4}$/.test(val)) {
-                   setUserProfile({...userProfile, birthYear: val ? parseInt(val) : ''});
+                 // 最大4桁まで許可
+                 if (val.length <= 4) {
+                   setUserProfile(prev => ({...prev, birthYear: val === '' ? '' : parseInt(val)}));
                  }
                }}
                maxLength="4"
@@ -1110,20 +1111,52 @@ export default function App() {
                  <div className="flex gap-2">
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">開始年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.elementary.startAge || 7}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, elementary: {...userProfile.studentSettings.elementary, startAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               elementary: {
+                                 ...prev.studentSettings.elementary,
+                                 startAge: val === '' ? 7 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">終了年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.elementary.endAge || 12}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, elementary: {...userProfile.studentSettings.elementary, endAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               elementary: {
+                                 ...prev.studentSettings.elementary,
+                                 endAge: val === '' ? 12 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                  </div>
@@ -1134,20 +1167,52 @@ export default function App() {
                  <div className="flex gap-2">
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">開始年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.middle.startAge || 13}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, middle: {...userProfile.studentSettings.middle, startAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               middle: {
+                                 ...prev.studentSettings.middle,
+                                 startAge: val === '' ? 13 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">終了年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.middle.endAge || 15}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, middle: {...userProfile.studentSettings.middle, endAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               middle: {
+                                 ...prev.studentSettings.middle,
+                                 endAge: val === '' ? 15 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                  </div>
@@ -1158,20 +1223,52 @@ export default function App() {
                  <div className="flex gap-2">
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">開始年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.high.startAge || 16}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, high: {...userProfile.studentSettings.high, startAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               high: {
+                                 ...prev.studentSettings.high,
+                                 startAge: val === '' ? 16 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">終了年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.high.endAge || 18}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, high: {...userProfile.studentSettings.high, endAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               high: {
+                                 ...prev.studentSettings.high,
+                                 endAge: val === '' ? 18 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                  </div>
@@ -1182,20 +1279,52 @@ export default function App() {
                  <div className="flex gap-2">
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">開始年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.university.startAge || 19}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, university: {...userProfile.studentSettings.university, startAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               university: {
+                                 ...prev.studentSettings.university,
+                                 startAge: val === '' ? 19 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                    <div className="flex-1">
                      <span className="text-xs text-gray-600">終了年齢</span>
-                     <input 
-                       type="number" 
+                     <input
+                       type="text"
+                       inputMode="numeric"
+                       pattern="[0-9]*"
                        className="pixel-input w-full p-1 text-sm"
                        value={userProfile.studentSettings?.university.endAge || 22}
-                       onChange={(e) => setUserProfile({...userProfile, studentSettings: {...userProfile.studentSettings, university: {...userProfile.studentSettings.university, endAge: parseInt(e.target.value)}}})}
+                       onChange={(e) => {
+                         const val = e.target.value.replace(/[^0-9]/g, '');
+                         if (val.length <= 3) {
+                           setUserProfile(prev => ({
+                             ...prev,
+                             studentSettings: {
+                               ...prev.studentSettings,
+                               university: {
+                                 ...prev.studentSettings.university,
+                                 endAge: val === '' ? 22 : parseInt(val)
+                               }
+                             }
+                           }));
+                         }
+                       }}
                      />
                    </div>
                  </div>
